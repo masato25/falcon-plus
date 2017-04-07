@@ -7,4 +7,3 @@ open-falcon
 glide.yaml
 package_cache_tmp/
 vendor/
-*.tar.gz

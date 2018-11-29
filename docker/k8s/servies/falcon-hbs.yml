@@ -1,0 +1,19 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: falcon-hbs
+  labels:
+    app: falcon-hbs
+spec:
+  selector:
+    app: falcon-hbs
+  ports:
+    - protocol: TCP
+      port: 6030
+      targetPort: 6030
+      name: 'p1'
+    - protocol: TCP
+      port: 6031
+      targetPort: 6031
+      name: 'p2'

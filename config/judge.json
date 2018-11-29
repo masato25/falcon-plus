@@ -4,14 +4,14 @@
     "remain": 11,
     "http": {
         "enabled": true,
-        "listen": "%%JUDGE_HTTP%%"
+        "listen": "0.0.0.0:6081"
     },
     "rpc": {
         "enabled": true,
-        "listen": "%%JUDGE_RPC%%"
+        "listen": "0.0.0.0:6080"
     },
     "hbs": {
-        "servers": ["%%HBS_RPC%%"],
+        "servers": ["0.0.0.0:6030"],
         "timeout": 300,
         "interval": 60
     },

@@ -1,0 +1,38 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: falcon-transfer-pod
+  labels:
+    app: app
+spec:
+  selector:
+    matchLabels:
+      app: falcon-transfer-pod
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: falcon-transfer-pod
+        role: master
+        tier: backend
+    spec:
+      volumes:
+      - name: falcon-apps
+        #emptyDir: {}
+        hostPath:
+          path: "/k8s/open-falcon"
+      containers:
+      - name: falcon-transfer
+        image: alpine:3.7
+        workingDir: "/root/open-falcon/transfer"
+        command: ["./bin/falcon-transfer"]
+        args: ["-c", "./config/cfg.json"]
+        volumeMounts:
+        - mountPath: '/root/open-falcon'
+          name: falcon-apps
+        ports:
+        - containerPort: 6060
+        - containerPort: 8433
+        - containerPort: 4444

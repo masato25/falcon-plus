@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: falcon-store
+spec:
+  selector:
+    matchLabels:
+      run: falcon-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: falcon-db
+    spec:
+      containers:
+      - name: database
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: 'test123456'
+        imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: '/tmp/db_schema'
+            name: falcon-schema
+      volumes:
+      - name: falcon-schema
+        hostPath:
+          path: "/k8s/db_schema"

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: falcon-mysql
+  labels:
+    app: mysql
+spec:
+  selector:
+    app: falcon-mysql
+    role: master
+    tier: backend
+  ports:
+    - port: 3306
+      targetPort: 3306

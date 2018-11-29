@@ -1,0 +1,14 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: falcon-redis
+  labels:
+    app: redis
+spec:
+  selector:
+    app: falcon-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379

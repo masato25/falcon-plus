@@ -1,0 +1,23 @@
+---
+kind: Pod 
+apiVersion: v1
+metadata:
+  name: databases
+  labels:
+    app: store
+spec:
+  containers:
+  - name: database
+    image: mysql:5.7
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: 'test123456'
+    args: ["/home/masato/Dev/go/src/github.com/open-falcon/falcon-plus/scripts/mysql/db_schema:/tmp/db_schema"] 
+    volumeMounts:
+    - mountPath: '/tmp/db_schema'
+      name: falcon-schema
+  volumes:
+  - name: falcon-schema
+    hostPath: 
+      path: "/home/masato/Dev/go/src/github.com/open-falcon/falcon-plus/scripts/mysql/db_schema/"
+      type: Directory

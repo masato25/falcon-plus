@@ -1,0 +1,37 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: falcon-graph-pod
+  labels:
+    app: app
+spec:
+  selector:
+    matchLabels:
+      app: falcon-graph-pod
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: falcon-graph-pod
+        role: master
+        tier: backend
+    spec:
+      #volumes:
+      #- name: falcon-apps
+        #emptyDir: {}
+        #hostPath:
+        #  path: "/k8s/open-falcon"
+      containers:
+      - name: falcon-graph
+        image: masatow25/falcon-graph:v0.2
+        #workingDir: "/root/graph"
+        #command: ["./bin/falcon-graph"]
+        #args: ["-c", "./config/cfg.json"]
+        #volumeMounts:
+        #- mountPath: '/root/open-falcon'
+        #  name: falcon-apps
+        ports:
+        - containerPort: 6070
+        - containerPort: 6071

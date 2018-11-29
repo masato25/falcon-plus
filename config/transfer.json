@@ -3,11 +3,11 @@
     "minStep": 30,
     "http": {
         "enabled": true,
-        "listen": "%%TRANSFER_HTTP%%"
+        "listen": "0.0.0.0:6060"
     },
     "rpc": {
         "enabled": true,
-        "listen": "%%TRANSFER_RPC%%"
+        "listen": "0.0.0.0:8433"
     },
     "socket": {
         "enabled": true,
@@ -46,6 +46,6 @@
         "maxConns": 32,
         "maxIdle": 32,
         "retry": 3,
-        "address": "127.0.0.1:8088"
+        "address": "0.0.0.0:8088"
     }
 }

@@ -1,0 +1,26 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: databases
+  labels:
+    app: store
+spec:
+  containers:
+  - name: database
+    image: mysql:5.7
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: 'test123456'
+    imagePullPolicy: Always
+    volumeMounts:
+    - mountPath: '/tmp/db_schema'
+      name: falcon-schema
+  volumes:
+  - name: falcon-schema
+    #emptyDir: {}
+    hostPath:
+      path: "/k8s/db_schema"
+  containers:
+  - name: redis
+    image: redis:4-alpine3.8

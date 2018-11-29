@@ -8,6 +8,6 @@
     "trustable": [""],
     "http": {
         "enabled": true,
-        "listen": "%%HBS_HTTP%%"
+        "listen": "0.0.0.0:6031"
     }
 }

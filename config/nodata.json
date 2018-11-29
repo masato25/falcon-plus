@@ -2,12 +2,12 @@
     "debug": true,
     "http": {
         "enabled": true,
-        "listen": "%%NODATA_HTTP%%"
+        "listen": "0.0.0.0:6090"
     },
     "plus_api":{
         "connectTimeout": 500,
         "requestTimeout": 2000,
-        "addr": "http://127.0.0.1:8080",
+        "addr": "http://0.0.0.0:8080",
         "token": "default-token-used-in-server-side"
     },
     "config": {

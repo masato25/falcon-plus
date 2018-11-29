@@ -1,0 +1,45 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: falcon-hbs-pod
+  labels:
+    app: app
+spec:
+  selector:
+    matchLabels:
+      app: falcon-hbs-pod
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: falcon-hbs-pod
+        role: master
+        tier: backend
+    spec:
+      volumes:
+      - name: falcon-apps
+        #emptyDir: {}
+        hostPath:
+          path: "/k8s/open-falcon"
+      # initContainers:
+      # - name: falconl-hbs-init
+      #   image: alpine:3.8
+      #   command: ['sh', '-c', 'until nsloolup falconl-hbs; do echo waiting for initservice; sleep 2; done;']
+      containers:
+      - name: falcon-hbs
+        image: alpine:3.7
+        workingDir: "/root/open-falcon/hbs"
+        command: ["./bin/falcon-hbs"]
+        args: ["-c", "./config/cfg.json"]
+        # command: ["pwd", "/usr/bin -c \"echo 'hello'\"", "/usr/bin -c \"sleep 100\""]
+        #command: ["/bin/sh"]
+        #args: ["-c", "./sleep.sh"]
+        #args: ["-c", "\"./bin/falcon-hbs -c ./config/cfg.json\""]
+        volumeMounts:
+        - mountPath: '/root/open-falcon'
+          name: falcon-apps
+        ports:
+        - containerPort: 6030
+        - containerPort: 6031

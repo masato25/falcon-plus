@@ -1,0 +1,23 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: falcon-api
+  labels:
+    app: falcon-api
+spec:
+  selector:
+    app: falcon-api
+  ports:
+    - protocol: TCP
+      port: 6060
+      targetPort: 6060
+      name: 'p1'
+    - protocol: TCP
+      port: 8433
+      targetPort: 8433
+      name: 'p2'
+    - protocol: TCP
+      port: 4444
+      targetPort: 4444
+      name: 'p3'

@@ -1,0 +1,19 @@
+---
+kind: Pod 
+apiVersion: v1
+metadata:
+  name: apps
+  labels:
+    app: program
+spec:
+  containers:
+  - name: osbase
+    image: alpine
+    volumeMounts:
+    - mountPath: '/open-falcon'
+      name: apps
+  volumes:
+  - name: apps
+    hostPath:
+      path: "/k8s"
+      type: Directory

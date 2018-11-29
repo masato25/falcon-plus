@@ -1,0 +1,54 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: falcon-mysql
+  labels:
+    app: mysql
+spec:
+  selector:
+    matchLabels:
+      app: falcon-mysql
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: falcon-mysql
+        role: master
+        tier: backend
+    spec:
+      #volumes:
+      #- name: falcon-schema
+        #emptyDir: {}
+        #  hostPath:
+        #  path: "/k8s"
+      containers:
+      - name: falconl-mysql
+        image: masatow25/falcon-mysql:v0.1
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: 'test123456'
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+            #volumeMounts:
+            #- name: falcon-schema
+            #mountPath: '/k8s'
+        ports:
+        - containerPort: 3306
+        # initContainers:
+        # - name: falconl-mysql-init
+        #   image: mysql:5.7
+        #   command:
+        #   - "cp"
+        #   - "/k8s/db_schema/*.sql"
+        #   - "/k8s/test/"
+        #   # command: ['echo "hello"; done;']
+        #   # command: ['sh', '-c', 'until echo "hello"; do echo waiting for initservice; sleep 2; done;']
+        #   # workingDir: "/tmp/k8s/db_schema"
+        #   # command: ["sh", "-c", "until cp /k8s/db_schema/*.sql /docker-entrypoint-initdb.d/; do echo waiting for init; sleep 3; done;"]
+        #   volumeMounts:
+        #     - name: falcon-schema
+        #       mountPath: '/k8s'

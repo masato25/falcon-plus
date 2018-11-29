@@ -1,0 +1,42 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: databases
+  labels:
+    app: store
+spec:
+  containers:
+    - name: database
+      image: mysql:5.7
+  initContainers:
+    - name: falcon-db
+      image: mysql:5.7
+      command: ['cd', '/tmp', '&&', '\',
+        'git', 'clone', '--depth=1', 'https://github.com/open-falcon/falcon-plus', '&&', '\',
+        'cd', '/tmp/falcon-plus/', '&&', '\',
+        'for', 'x', 'in', '`ls ./scripts/mysql/db_schema/*sql;`', 'do', 
+          'echo', 'init', 'mysql', 'table', '$x', '...;',
+          'docker', 'exec', '-i', 'falcon-mysql', 'mysql', '-uroot', '-ptest123456', '<', '$x;',
+        'done', '&&', '\',
+        'rm', '-rf', '/tmp/falcon-plus'
+      ]
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis
+  labels:
+    app: store
+spec:
+  containers:
+    - name: falcon-redis
+      image: redis:4-alpine3.8
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379

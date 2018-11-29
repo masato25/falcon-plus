@@ -44,11 +44,12 @@ fmt-check:
 	fi;
 
 $(CMD):
-	go build -o bin/$@/falcon-$@ ./modules/$@
+	$(shell export GOOS=linux; export GOARCH=amd64; export CGO_ENABLED=0; go build -o bin/$@/falcon-$@ ./modules/$@)
 
 .PHONY: $(TARGET)
 $(TARGET): $(GOFILES)
-	go build -ldflags "-X main.GitCommit=`git rev-parse --short HEAD` -X main.Version=$(VERSION)" -o open-falcon
+	$(shell export GOOS=linux; export GOARCH=amd64; export CGO_ENABLED=0; go build -ldflags "-X main.GitCommit=`git rev-parse --short HEAD` -X main.Version=$(VERSION)" -o open-falcon)
+
 
 checkbin: bin/ config/ open-falcon
 
@@ -89,10 +90,29 @@ pack4docker: checkbin
 	tar -C out -zcf open-falcon-v$(VERSION).tar.gz .
 	@rm -rf out
 
+pack4k8s: checkbin
+	@if [ -e out ] ; then rm -rf out; fi
+	@mkdir out
+	@$(foreach var,$(CMD),mkdir -p ./out/$(var)/bin;)
+	@$(foreach var,$(CMD),mkdir -p ./out/$(var)/config;)
+	@$(foreach var,$(CMD),mkdir -p ./out/$(var)/logs;)
+	@$(foreach var,$(CMD),cp ./config/$(var).json ./out/$(var)/config/cfg.json;)
+	@$(foreach var,$(CMD),cp ./bin/$(var)/falcon-$(var) ./out/$(var)/bin;)
+	@cp -r ./modules/agent/public ./out/agent/
+	@(cd ./out && ln -s ./agent/public/ ./public)
+	@(cd ./out && mkdir -p ./agent/plugin && ln -s ./agent/plugin/ ./plugin)
+	@cp -r ./modules/api/data ./out/api/
+	@mkdir out/graph/data
+	@bash ./config/confgen_k8s.sh
+	@cp $(TARGET) ./out/$(TARGET)
+	tar -C out -zcf open-falcon-v$(VERSION).tar.gz .
+	@rm -rf out
+
 clean:
 	@rm -rf ./bin
 	@rm -rf ./out
 	@rm -rf ./$(TARGET)
 	@rm -rf open-falcon-v$(VERSION).tar.gz
+
 
 .PHONY: clean all agent aggregator graph hbs judge nodata transfer gateway api alarm

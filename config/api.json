@@ -10,7 +10,7 @@
 	},
 	"graphs": {
 		"cluster": {
-			"graph-00": "127.0.0.1:6070"
+			"graph-00": "0.0.0.0:6070"
 		},
 		"max_conns": 100,
 		"max_idle": 100,
@@ -19,7 +19,7 @@
 		"numberOfReplicas": 500
 	},
 	"metric_list_file": "./api/data/metric",
-	"web_port": "%%PLUS_API_HTTP%%",
+	"web_port": "0.0.0.0:8080",
 	"access_control": true,
 	"signup_disable": false,
 	"salt": "",

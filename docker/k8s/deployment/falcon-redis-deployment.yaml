@@ -1,0 +1,27 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: falcon-redis
+  labels:
+    app: redis
+spec:
+  selector:
+    matchLabels:
+      app: falcon-redis
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: falcon-redis
+        role: master
+        tier: backend
+    spec:
+      volumes:
+      - name: falcon-redis
+      containers:
+      - name: redis
+        image: redis:4-alpine3.8
+        ports:
+        - containerPort: 6379
